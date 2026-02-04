@@ -1,0 +1,53 @@
+<div class="hero">
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <div class="eyebrow">AWS PRODUCT MANAGER</div>
+    <h1>Đăng nhập hệ thống</h1>
+    <p class="subtitle">Quản lý sản phẩm với DynamoDB & S3</p>
+  </div>
+</div>
+
+<div class="auth">
+  <div class="panel">
+    <% if (error) { %>
+      <div class="alert error">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form action="/login" method="POST" class="form">
+      <div class="field">
+        <label for="username">Tên đăng nhập</label>
+        <input 
+          type="text" 
+          id="username" 
+          name="username" 
+          required 
+          autofocus
+          placeholder="Nhập tên đăng nhập"
+        >
+      </div>
+
+      <div class="field">
+        <label for="password">Mật khẩu</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          required
+          placeholder="Nhập mật khẩu"
+        >
+      </div>
+
+      <button type="submit" class="btn solid" style="width: 100%; margin-top: 8px;">
+        🔑 Đăng nhập
+      </button>
+    </form>
+
+    <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--border);">
+      <p style="margin: 0 0 8px; font-weight: 600;">Tài khoản mẫu:</p>
+      <p style="margin: 4px 0; color: var(--muted); font-size: 14px;">👤 Admin: <code>admin</code> / <code>admin123</code></p>
+      <p style="margin: 4px 0; color: var(--muted); font-size: 14px;">👤 User: <code>user</code> / <code>user123</code></p>
+    </div>
+  </div>
+</div>

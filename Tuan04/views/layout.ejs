@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Sản phẩm - AWS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <% if (typeof user !== 'undefined' && user) { %>
+  <div class="topbar">
+    <a href="/" class="topbar__brand">
+      <span style="font-size: 1.2rem;">📦</span> 
+      <span>Quản lý Sản phẩm</span>
+    </a>
+    <div class="topbar__links">
+      <a href="/">Sản phẩm</a>
+      <a href="/categories">Danh mục</a>
+      <span class="chip user">👤 <%= user.username %></span>
+      <form action="/logout" method="POST">
+        <button type="submit" class="btn ghost" style="padding: 6px 12px;">Đăng xuất</button>
+      </form>
+    </div>
+  </div>
+  <% } %>
+
+  <div class="page">
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <div class="alert <%= flash.type %>">
+        <%= flash.message %>
+      </div>
+    <% } %>
+    
+    <%- body %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<div class="hero">
+  <div class="hero__overlay"></div>
+  <div class="hero__content">
+    <div class="eyebrow">AWS DYNAMODB & S3</div>
+    <h1>Quản lý Sản phẩm</h1>
+    <p class="subtitle">Tìm kiếm, lọc và quản lý sản phẩm một cách dễ dàng</p>
+    <a href="/products/new" class="btn solid">➕ Thêm sản phẩm mới</a>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel__head">
+    <div>
+      <h2>Danh sách sản phẩm</h2>
+      <% if (usedIndex) { %>
+        <p class="muted">🔍 Sử dụng index: <strong><%= usedIndex %></strong></p>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Filter Form -->
+  <form action="/" method="GET" class="filter">
+    <div class="field">
+      <input 
+        type="text" 
+        name="q" 
+        placeholder="🔍 Tìm kiếm sản phẩm..."
+        value="<%= filters.q || '' %>"
+      >
+    </div>
+
+    <div class="field">
+      <select name="categoryId">
+        <option value="">Tất cả danh mục</option>
+        <% categories.forEach(cat => { %>
+          <option value="<%= cat.categoryId %>" <%= filters.categoryId === cat.categoryId ? 'selected' : '' %>>
+            <%= cat.name %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="field">
+      <input 
+        type="number" 
+        name="priceMin" 
+        placeholder="Giá từ"
+        value="<%= filters.priceMin || '' %>"
+      >
+    </div>
+
+    <div class="field">
+      <input 
+        type="number" 
+        name="priceMax" 
+        placeholder="Giá đến"
+        value="<%= filters.priceMax || '' %>"
+      >
+    </div>
+
+    <div class="field">
+      <button type="submit" class="btn ghost" style="width: 100%;">Lọc</button>
+    </div>
+  </form>
+
+  <% if (products.length === 0) { %>
+    <div style="padding: 64px; text-align: center;">
+      <p style="color: var(--muted); font-size: 18px;">Không tìm thấy sản phẩm nào.</p>
+      <a href="/" class="link">Xóa bộ lọc</a>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Danh mục</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach(product => { %>
+            <tr>
+              <td>
+                <% if (product.url_image) { %>
+                  <img src="<%= product.url_image %>" alt="<%= product.name %>" class="thumb">
+                <% } else { %>
+                  <div class="thumb" style="display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                    📦
+                  </div>
+                <% } %>
+              </td>
+              <td><strong><%= product.name %></strong></td>
+              <td>
+                <% if (product.categoryName) { %>
+                  <span class="badge success"><%= product.categoryName %></span>
+                <% } else { %>
+                  <span style="color: var(--muted);">—</span>
+                <% } %>
+              </td>
+              <td style="color: var(--accent-2); font-weight: 600;">
+                <%= Number(product.price).toLocaleString('vi-VN') %> ₫
+              </td>
+              <td>
+                <% if (product.inventoryStatus === 'out') { %>
+                  <span class="badge danger">
+                    ❌ Hết hàng (<%= product.quantity %>)
+                  </span>
+                <% } else if (product.inventoryStatus === 'low') { %>
+                  <span class="badge warning">
+                    ⚠️ Sắp hết (<%= product.quantity %>)
+                  </span>
+                <% } else { %>
+                  <span class="badge success">
+                    ✅ Còn hàng (<%= product.quantity %>)
+                  </span>
+                <% } %>
+              </td>
+              <td>
+                <div class="row-actions">
+                  <a href="/products/<%= product.id %>/edit" class="link">✏️ Sửa</a>
+                  <form action="/products/<%= product.id %>?_method=DELETE" method="POST">
+                    <button 
+                      type="submit" 
+                      class="link danger"
+                      onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')"
+                    >
+                      🗑️ Xóa
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <% if (pagination.currentPage > 1) { %>
+        <a href="/?<%= pagination.prevQuery %>" class="btn ghost">
+          ← Trang trước
+        </a>
+      <% } else { %>
+        <a href="#" class="btn ghost" aria-disabled="true">← Trang trước</a>
+      <% } %>
+      
+      <span>
+        Trang <strong><%= pagination.currentPage %></strong> / <%= pagination.totalPages %>
+      </span>
+      
+      <% if (pagination.currentPage < pagination.totalPages) { %>
+        <a href="/?<%= pagination.nextQuery %>" class="btn ghost">
+          Trang sau →
+        </a>
+      <% } else { %>
+        <a href="#" class="btn ghost" aria-disabled="true">Trang sau →</a>
+      <% } %>
+    </div>
+  <% } %>
+</div>
